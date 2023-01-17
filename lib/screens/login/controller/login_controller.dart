@@ -51,7 +51,7 @@ Future<void> getLoginInfo(BuildContext context)async{
 }
 Future<void> setLicenceKey(context)async{
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  print(await prefs.getString("NAME"));
+  print(await prefs.getString("LICENCE"));
   if(prefs.getString("LICENCE")==""||prefs.getString("LICENCE")==null){
   await  prefs.setString("NAME",loginData?.name.toString()??"");
   print(await prefs.getString("NAME"));
@@ -62,7 +62,7 @@ Future<void> setLicenceKey(context)async{
   Navigator.push(context,MaterialPageRoute(builder: (context)=>CreatePinView()));
   }
   else{
-    message="Server error";
+    Navigator.push(context,MaterialPageRoute(builder: (context)=>CreatePinView()));
   }
 }
 }

@@ -157,14 +157,26 @@ class HomeScreenController extends ChangeNotifier {
 
     notifyListeners();
   }
+  void onDeletePressed(itmId)async{
+    Database db = await SQLiteDbProvider.db.database;
+    db.rawUpdate("update itm_mastr set itm_rate=0,is_selected='N',qty=0 where itm_id=${itmId}");
+    selectedItmList=await db.rawQuery("select itm_id,itm_name,itm_rate,qty from itm_mastr where is_selected='Y'");
+    List sum=await db.rawQuery("select sum(itm_rate)sum from itm_mastr where is_selected='Y'");
+    print(sum);
+    for(int i=0;i<sum.length;i++){
+      totSum=sum[i]["sum"].toStringAsFixed(2);
+    }
+    notifyListeners();
+  }
+
   Future<void> getSelectedItems(context)async{
     Database db = await SQLiteDbProvider.db.database;
-    selectedItmList=await db.rawQuery("select itm_name,itm_rate,qty from itm_mastr where is_selected='Y'");
+    selectedItmList=await db.rawQuery("select itm_id,itm_name,itm_rate,qty from itm_mastr where is_selected='Y'");
     List sum=await db.rawQuery("select sum(itm_rate)sum from itm_mastr where is_selected='Y'");
   print(sum);
 
    for(int i=0;i<sum.length;i++){
-     totSum=sum[i]["sum"].toString();
+     totSum=sum[i]["sum"].toStringAsFixed(2);
    }
     print(selectedItmList?.length);
     int num=selectedItmList?.length??0;

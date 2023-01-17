@@ -48,6 +48,7 @@ dev_dependencies:
   sqflite:
   path_provider:
   intl: ^0.18.0
+  flutter_slidable: ^0.6.0
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

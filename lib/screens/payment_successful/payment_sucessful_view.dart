@@ -34,9 +34,9 @@ class _PaymentSucessfullScreenViewState
     });
   }
 
-  Future<http.Response> uploadSaleData(String title) async {
+  Future<http.Response> uploadSaleData() async {
     Database db = await SQLiteDbProvider.db.database;
-    List salesData=await db.rawQuery("select itm_id,qty,rate from itm_mastr where is_selected='Y'");
+    List salesData=await db.rawQuery("select itm_id,qty,itm_rate from itm_mastr where is_selected='Y'");
     final SharedPreferences pref = await SharedPreferences.getInstance();
     return http.post(
       Uri.parse("${BaseUrl.baseUrl}?type=SAVESALE"),
@@ -44,6 +44,7 @@ class _PaymentSucessfullScreenViewState
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
+
         'branch': pref.getString("BRANCH").toString(),
         'location': pref.getString("BRANCH").toString(),
         'bill_name': billNameController.text,
@@ -59,7 +60,6 @@ class _PaymentSucessfullScreenViewState
       }),
     );
   }
-
 
   @override
   void initState() {
@@ -217,11 +217,13 @@ class _PaymentSucessfullScreenViewState
                   return;
                 }
                 else {
-                  Database db = await SQLiteDbProvider.db.database;
-                  db.rawUpdate(
-                      "update itm_mastr set itm_rate=0,is_selected='N' where is_selected='Y'");
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => HomeScreenView()));
+                  uploadSaleData().then((sucess)async{
+                    Database db = await SQLiteDbProvider.db.database;
+                    db.rawUpdate(
+                        "update itm_mastr set itm_rate=0,is_selected='N' where is_selected='Y'");
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => HomeScreenView()));
+                  });
                 }
                 // Navigator.push(context,MaterialPageRoute(builder: (context)=>PaymentScreenView()));
               },

@@ -28,6 +28,9 @@ class ItemCartController extends ChangeNotifier{
     notifyListeners();
   }
   void onKeyPadTap(key){
+    if(qty=="0.00"){
+     qty="";
+    }
     qty=qty+key;
     //
     // if(double.parse(qty)<=0|| qty==""){
@@ -58,17 +61,18 @@ class ItemCartController extends ChangeNotifier{
         if(status=="1"){
           rateData=data.data;
           int num=rateData?.length??0;
-          // if(itemRate!=null&&quantity!=null){
-          //   rate=itemRate;
-          //   qty=quantity;
-          // }
-          // else{
+          if(itemRate!=null&&quantity!=null){
+            qty=quantity;
+          }
+          else{
+            qty="0.00";
+          }
             for(int i=0;i<num;i++){
               rate=rateData?[0].incRate??"0.0";
               actualRate=rateData?[0].incRate??"0.0";
               notifyListeners();
             }
-          // }
+
 
 
         }
