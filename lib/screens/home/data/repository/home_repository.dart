@@ -10,4 +10,8 @@ class HomeRepository{
      print("${BaseUrl.getPartyUrl}&token=${token}");
     return http.get(Uri.parse("${BaseUrl.getPartyUrl}&token=${token}"));
     }
+  Future<http.Response> getGroupData(token)async{
+    print("${BaseUrl.getGroupUrl}&token=${token}");
+    return http.get(Uri.parse("${BaseUrl.getGroupUrl}&token=${token}"));
+  }
 }

@@ -29,9 +29,8 @@ class _SearchBarState extends State<SearchBar> {
           suffixIcon: widget.suffixIcon,
         ),
         controller: widget.controller,
-        onChanged:(value){
-          widget.onChanged;
-        },
+        onChanged:widget.onChanged,
+
       ),
     );
 

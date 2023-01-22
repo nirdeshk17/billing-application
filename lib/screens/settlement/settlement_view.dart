@@ -109,26 +109,26 @@ class _SettlementScreenViewState extends State<SettlementScreenView> {
                           "Remaining Rs 0.00",
                           style: TextStyle(fontSize: 18),
                         ),
-                        watch.isSplitBtnPressed==false?Container(
-                          height: 50,
-                          width: 130,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                read.onSplitBtnPressed();
-                              },
-                              child: Text(
-                                "Split",
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                  MaterialStateProperty.all(
-                                      AppColor.primaryColor),
-                                  shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(10))))),
-                        ):Container()
+                        // watch.isSplitBtnPressed==false?Container(
+                        //   height: 50,
+                        //   width: 130,
+                        //   child: ElevatedButton(
+                        //       onPressed: () {
+                        //         read.onSplitBtnPressed();
+                        //       },
+                        //       child: Text(
+                        //         "Split",
+                        //         style: TextStyle(fontSize: 18),
+                        //       ),
+                        //       style: ButtonStyle(
+                        //           backgroundColor:
+                        //           MaterialStateProperty.all(
+                        //               AppColor.primaryColor),
+                        //           shape: MaterialStateProperty.all(
+                        //               RoundedRectangleBorder(
+                        //                   borderRadius:
+                        //                   BorderRadius.circular(10))))),
+                        // ):Container()
 
                       ],
                     ),

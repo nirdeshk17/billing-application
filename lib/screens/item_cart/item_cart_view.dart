@@ -104,11 +104,11 @@ class _ItemCartScreenViewState extends State<ItemCartScreenView> {
                     ),
                     Column(
                       children: [
-                        Text(
-                          "Stock 20 nos",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
+                        // Text(
+                        //   "Stock 20 nos",
+                        //   style: TextStyle(
+                        //       fontSize: 14, fontWeight: FontWeight.bold),
+                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -145,7 +145,7 @@ class _ItemCartScreenViewState extends State<ItemCartScreenView> {
                       style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                     Text(
-                      watch.qty!="null"? watch.qty:"0.0",
+                      watch.qty!="null"? watch.qty:"0.00",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),

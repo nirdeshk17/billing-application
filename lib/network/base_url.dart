@@ -6,4 +6,5 @@ static const String getItemsUrl="${baseUrl}?request=GETITEMS";
 static const String getPartyUrl="${baseUrl}?request=GETPARTY";
 static const String getPaymentUrl="${baseUrl}?request=GETPAYTYPES";
 static const String getRateUrl="${baseUrl}?request=GETRATE";
+static const String getGroupUrl="${baseUrl}?request=GETGROUPS";
 }

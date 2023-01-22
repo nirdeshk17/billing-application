@@ -24,15 +24,18 @@ class ItemsResModel {
 class itmData {
   String? itmId;
   String? itmName;
+  String? groupId;
 
   itmData({
     this.itmId,
     this.itmName,
+    this.groupId,
   });
 
   itmData.fromJson(Map<String, dynamic> json) {
     itmId = json["itm_id"];
     itmName = json["itm_name"];
+    groupId=json["grp_id"];
   }
 }
 

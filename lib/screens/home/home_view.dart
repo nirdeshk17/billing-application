@@ -483,14 +483,14 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                return false;
                              }
                            },
-                           items:watch.itemNameList,
+                           items:watch.groupNameList,
                            onSaved: (value){
 
                              print(value);
                            },
                            showSearchBox: true,
                            onChanged: (value){
-                             Navigator.push(context,MaterialPageRoute(builder: (context)=>ItemCartScreenView(itemName: value.toString(),)));
+read.onGroupSelected(value);
                            },
                            selectedItem: "All Items",
                          ),
@@ -530,16 +530,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                      label: "Search",
                      controller: watch.searchController,
                      onChanged: (value){
-
+                      read.onHomesearch(value);
                      },
                      suffixIcon: InkWell(child:Icon(Icons.close,color: Colors.black),onTap: (){
                        read.onClosePressed();
                      },)
                  ),
-                 ListView.builder(itemCount:watch.selectedItmList?.length??0,shrinkWrap: true,itemBuilder: (BuildContext,index){
+                 ListView.builder(itemCount:watch.itemsList.length!=0?watch.itemsList.length:0,physics: ScrollPhysics(),shrinkWrap: true,itemBuilder: (BuildContext,index){
                    return GestureDetector(
                      onTap: (){
-                       Navigator.push(context,MaterialPageRoute(builder: (BuildContext)=>ItemCartScreenView(itemName: watch.selectedItmList?[index]["itm_name"],itemRate: watch.selectedItmList?[index]["itm_rate"].toString(),qty: watch.selectedItmList?[index]["qty"].toString(),)));
+                       read.onItemSelected(watch.itemsList[index]["itm_id"],context,watch.itemsList[index]["itm_name"]);
+                       // Navigator.push(context,MaterialPageRoute(builder: (BuildContext)=>ItemCartScreenView(itemName: watch.itemsList[index]["itm_name"],itemRate: watch.selectedItmList?[index]["itm_rate"].toString(),qty: watch.selectedItmList?[index]["qty"].toString(),)));
                      },
                      child: Column(
                        children: [
@@ -550,16 +551,16 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                        actionPane: SlidableDrawerActionPane(),
                        actionExtentRatio: 0.25,
 
-                       secondaryActions: [
-                         IconSlideAction(
-                           caption: 'Delete',
-                           color: Colors.red,
-                           icon: Icons.delete,
-                           onTap: () {
-                            read.onDeletePressed(watch.selectedItmList?[index]["itm_id"]);
-                           },
-                         ),
-                       ],
+                       // secondaryActions: [
+                       //   IconSlideAction(
+                       //     caption: 'Delete',
+                       //     color: Colors.red,
+                       //     icon: Icons.delete,
+                       //     onTap: () {
+                       //      // read.onDeletePressed(watch.itemList[index]["itm_id"]);
+                       //     },
+                       //   ),
+                       // ],
                          child: Container(
                            padding: EdgeInsets.only(
                                left: 10,
@@ -584,74 +585,145 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                            child: Column(
                              crossAxisAlignment:CrossAxisAlignment.start,
                              children: [
-                               Row(
-                                 children: [
-                                   Container(
-                                     child:    Text(watch.selectedItmList?[index]["itm_name"].toString()??"",
+                               Container(
+                                     child: Text(watch.itemsList[index]["itm_name"].toString(),
                                        style: TextStyle(
                                            color: Colors.black,
-                                           fontSize: 20),maxLines: 1,overflow: TextOverflow.ellipsis,),
+                                           fontSize: 16),maxLines: 1,overflow: TextOverflow.ellipsis,),
                                    ),
-                                 ],
-                                 mainAxisAlignment: MainAxisAlignment.center,
-                               ),
 
                                SizedBox(
                                  height: 5,
                                ),
-                               Row(
-                                 mainAxisAlignment:
-                                 MainAxisAlignment
-                                     .spaceBetween,
-                                 children: [
-                                   Row(
-                                     children: [
-                                       Text(
-                                         watch.selectedItmList?[index]["itm_rate"].toString()??"",
-                                         style: TextStyle(
-                                             color: Colors.black),
-                                       ),
-                                       SizedBox(
-                                         width: 5,
-                                       ),
-                                       Text(
-                                           watch.selectedItmList?[index]["qty"].toString()??"",
-                                           style: TextStyle(
-                                               color:
-                                               Colors.black)),
-                                     ],
-                                   ),
-                                   Row(
-                                     children: [
-                                       Text("${(double.parse( watch.selectedItmList?[index]["qty"])*double.parse( watch.selectedItmList?[index]["itm_rate"])).toStringAsFixed(2)}",
-                                         style: TextStyle(
-                                             color: Colors.black,fontSize: 18),
-                                       ),
-                                     ],
-                                   ),
-                                 ],
-                               ),
                              ],
                            ),
                          ),
-                         // Container(
-                         //   padding:EdgeInsets.symmetric(vertical:10,horizontal:10),
-                         //   child: Row(
-                         //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         //     children: [
-                         //       Text(watch.selectedItmList?[index]["itm_name"].toString()??""),
-                         //       Text(watch.selectedItmList?[index]["itm_rate"].toString()??""),
-                         //     ],
-                         //   ),
-                         //   decoration: BoxDecoration(
-                         //       border: Border.all(color: Colors.black)
-                         //   ),
-                         // ),
                      ),
                        ],
                      ),
                    );
                  }),
+
+
+
+
+
+                 // ListView.builder(itemCount:watch.selectedItmList?.length??0,shrinkWrap: true,itemBuilder: (BuildContext,index){
+                 //   return GestureDetector(
+                 //     onTap: (){
+                 //       Navigator.push(context,MaterialPageRoute(builder: (BuildContext)=>ItemCartScreenView(itemName: watch.selectedItmList?[index]["itm_name"],itemRate: watch.selectedItmList?[index]["itm_rate"].toString(),qty: watch.selectedItmList?[index]["qty"].toString(),)));
+                 //     },
+                 //     child: Column(
+                 //       children: [
+                 //         SizedBox(
+                 //           height: 10,
+                 //         ),
+                 //     Slidable(
+                 //       actionPane: SlidableDrawerActionPane(),
+                 //       actionExtentRatio: 0.25,
+                 //
+                 //       secondaryActions: [
+                 //         IconSlideAction(
+                 //           caption: 'Delete',
+                 //           color: Colors.red,
+                 //           icon: Icons.delete,
+                 //           onTap: () {
+                 //            read.onDeletePressed(watch.selectedItmList?[index]["itm_id"]);
+                 //           },
+                 //         ),
+                 //       ],
+                 //         child: Container(
+                 //           padding: EdgeInsets.only(
+                 //               left: 10,
+                 //               right: 10,
+                 //               top: 10,
+                 //               bottom: 10),
+                 //           width:
+                 //           MediaQuery.of(context).size.width,
+                 //           decoration: BoxDecoration(
+                 //               color: Colors.white,
+                 //               boxShadow: [
+                 //                 BoxShadow(
+                 //                   color: Colors.grey
+                 //                       .withOpacity(0.1),
+                 //                   spreadRadius: 2,
+                 //                   blurRadius: 4,
+                 //                   offset: Offset(0, 0),
+                 //                 ),
+                 //               ],
+                 //               borderRadius:
+                 //               BorderRadius.circular(10)),
+                 //           child: Column(
+                 //             crossAxisAlignment:CrossAxisAlignment.start,
+                 //             children: [
+                 //               Row(
+                 //                 children: [
+                 //                   Container(
+                 //                     child:    Text(watch.selectedItmList?[index]["itm_name"].toString()??"",
+                 //                       style: TextStyle(
+                 //                           color: Colors.black,
+                 //                           fontSize: 20),maxLines: 1,overflow: TextOverflow.ellipsis,),
+                 //                   ),
+                 //                 ],
+                 //                 mainAxisAlignment: MainAxisAlignment.center,
+                 //               ),
+                 //
+                 //               SizedBox(
+                 //                 height: 5,
+                 //               ),
+                 //               Row(
+                 //                 mainAxisAlignment:
+                 //                 MainAxisAlignment
+                 //                     .spaceBetween,
+                 //                 children: [
+                 //                   Row(
+                 //                     children: [
+                 //                       Text(
+                 //                         watch.selectedItmList?[index]["itm_rate"].toString()??"",
+                 //                         style: TextStyle(
+                 //                             color: Colors.black),
+                 //                       ),
+                 //                       SizedBox(
+                 //                         width: 5,
+                 //                       ),
+                 //                       Text(
+                 //                           watch.selectedItmList?[index]["qty"].toString()??"",
+                 //                           style: TextStyle(
+                 //                               color:
+                 //                               Colors.black)),
+                 //                     ],
+                 //                   ),
+                 //                   Row(
+                 //                     children: [
+                 //                       Text("${(double.parse( watch.selectedItmList?[index]["qty"])*double.parse( watch.selectedItmList?[index]["itm_rate"])).toStringAsFixed(2)}",
+                 //                         style: TextStyle(
+                 //                             color: Colors.black,fontSize: 18),
+                 //                       ),
+                 //                     ],
+                 //                   ),
+                 //                 ],
+                 //               ),
+                 //             ],
+                 //           ),
+                 //         ),
+                 //         // Container(
+                 //         //   padding:EdgeInsets.symmetric(vertical:10,horizontal:10),
+                 //         //   child: Row(
+                 //         //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 //         //     children: [
+                 //         //       Text(watch.selectedItmList?[index]["itm_name"].toString()??""),
+                 //         //       Text(watch.selectedItmList?[index]["itm_rate"].toString()??""),
+                 //         //     ],
+                 //         //   ),
+                 //         //   decoration: BoxDecoration(
+                 //         //       border: Border.all(color: Colors.black)
+                 //         //   ),
+                 //         // ),
+                 //     ),
+                 //       ],
+                 //     ),
+                 //   );
+                 // }),
                ],
              ),
            ),

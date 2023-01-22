@@ -28,10 +28,15 @@ class ItemCartController extends ChangeNotifier{
     notifyListeners();
   }
   void onKeyPadTap(key){
-    if(qty=="0.00"){
+    if(qty=="0.00"||qty=="0.0"||qty=="0"){
      qty="";
+     qty=key;
+     notifyListeners();
     }
-    qty=qty+key;
+    else{
+      qty=qty+key;
+    }
+
     //
     // if(double.parse(qty)<=0|| qty==""){
     //   rate=double.parse(actualRate.toString()).toStringAsFixed(2);
@@ -98,7 +103,7 @@ class ItemCartController extends ChangeNotifier{
         id=itmId[0]["itm_id"].toString();
       }
       print("hi");
-      db.rawUpdate("update itm_mastr set itm_rate=${totalRate},is_selected='Y',qty=${qty} where itm_id=${id}");
+      db.rawUpdate("update itm_mastr set itm_rate=${totalRate},is_selected='Y',qty=${qty},tot_rate=${double.parse(totalRate)*double.parse(qty)} where itm_id=${id}");
       Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreenView()));
     }
   }

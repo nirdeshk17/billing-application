@@ -38,7 +38,7 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Split"),
+              // Text("Split"),
             ],
           ),
           SizedBox(
@@ -75,33 +75,33 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 15,
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text("Loyality Customer"),
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(AppColor.primaryColor),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)))),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Praveen"),
-                    Text("Discount Rs 12.86"),
-                  ],
-                ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     SizedBox(
+            //       width: 15,
+            //     ),
+            //     ElevatedButton(
+            //       onPressed: () {},
+            //       child: Text("Loyality Customer"),
+            //       style: ButtonStyle(
+            //           backgroundColor:
+            //               MaterialStateProperty.all(AppColor.primaryColor),
+            //           shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(10)))),
+            //     ),
+            //     SizedBox(
+            //       width: 10,
+            //     ),
+            //     Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Text("Praveen"),
+            //         Text("Discount Rs 12.86"),
+            //       ],
+            //     ),
+            //   ],
+            // ),
             Divider(
               thickness: 1,
             ),
