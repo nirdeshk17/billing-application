@@ -134,6 +134,7 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
                                               SettlementScreenView(
                                                 paymentType: element?.paytypeName,
                                                 total: widget.totRate,
+                                                paymentId:int.parse(element?.paytypeId.toString()??""),
                                                 indexPosition: index,
                                               )));
                                 },

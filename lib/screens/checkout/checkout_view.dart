@@ -228,10 +228,14 @@ class _CheckoutViewScreenState extends State<CheckoutViewScreen> {
                                       children: [
                                         Text('\u{20B9}',style:TextStyle(
                                             color: Colors.black,fontSize: 16),),
-                                        // Text("${(double.parse( watch.selectedItmList?[index]["qty"].toString()??"0")*double.parse( watch.selectedItmList?[index]["itm_rate"].toString()??'0')).toStringAsFixed(2)}",
-                                        //   style: TextStyle(
-                                        //       color: Colors.black,fontSize: 16),
-                                        // ),
+                                        watch.selectedItmList?[index]["qty"]!=null?
+                                        Text( "${(watch.selectedItmList?[index]["qty"]*watch.selectedItmList?[index]["itm_rate"]).toStringAsFixed(2)}",
+                                          style: TextStyle(
+                                              color: Colors.black,fontSize: 16),
+                                        ):   Text("0.0",
+                                          style: TextStyle(
+                                              color: Colors.black,fontSize: 16),
+                                        ),
                                         SizedBox(
                                           width: 5,
                                         ),
@@ -273,7 +277,7 @@ class _CheckoutViewScreenState extends State<CheckoutViewScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                          Text("Total",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                      Text(widget.total??"0",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                      Text(watch.totSum??"0",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                     ],
                   ),)
 

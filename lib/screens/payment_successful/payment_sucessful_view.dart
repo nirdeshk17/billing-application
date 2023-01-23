@@ -12,8 +12,10 @@ import 'package:intl/intl.dart';
 class PaymentSucessfullScreenView extends StatefulWidget {
   final String ? total;
   final String? partyName;
+  final int ? paytype;
+  final int ? partyId;
 
-  const PaymentSucessfullScreenView({Key? key, this.total, this.partyName})
+  const PaymentSucessfullScreenView({Key? key, this.total, this.partyName,this.partyId,this.paytype})
       : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class _PaymentSucessfullScreenViewState
   TextEditingController mobileController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
   String message = "";
+  int ?partyId;
 
   setController() async {
     setState(() {
@@ -36,33 +39,43 @@ class _PaymentSucessfullScreenViewState
 
   Future<http.Response> uploadSaleData() async {
     Database db = await SQLiteDbProvider.db.database;
-    List salesData=await db.rawQuery("select itm_id,qty,itm_rate from itm_mastr where is_selected='Y'");
+    List salesData=await db.rawQuery("select itm_id,qty,(itm_rate)rate from itm_mastr where is_selected='Y'");
     final SharedPreferences pref = await SharedPreferences.getInstance();
+    print(salesData);
+    final Map<String,dynamic> body={
+      'branch': pref.getString("BRANCH").toString(),
+      'location': pref.getString("BRANCH").toString(),
+      'bill_name': billNameController.text,
+      'mobile': mobileController.text,
+      'party': partyId,
+      'gstin': null,
+      'date': DateFormat("yyy-MM-dd").format(DateTime.now()),
+      'address':null,
+      'user':pref.getString("ID").toString(),
+      'sales_items':salesData,
+      'settlements':[
+        {
+          "paytype":widget.paytype,
+          "amount":widget.total,
+          "settled_party":null,
+        }
+      ],
+    };
+    print(body);
     return http.post(
-      Uri.parse("${BaseUrl.baseUrl}?type=SAVESALE"),
+      Uri.parse("${BaseUrl.baseUrl}?request=SAVESALE&token=${pref.getString("LICENCE")}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, dynamic>{
-
-        'branch': pref.getString("BRANCH").toString(),
-        'location': pref.getString("BRANCH").toString(),
-        'bill_name': billNameController.text,
-        'mobile': mobileController.text,
-        'party': pref.getString("ID").toString(),
-        'gstin': null,
-        'date': DateFormat("yyy-MM-dd").format(DateTime.now()),
-        'address':null,
-        'user':pref.getString("ID").toString(),
-        'sales_items':salesData,
-        'settlements':[],
-
-      }),
+      body: jsonEncode(body)
     );
+
   }
 
   @override
   void initState() {
+    print(widget.paytype);
+    print(widget.total);
     setController();
   }
 
@@ -137,8 +150,15 @@ class _PaymentSucessfullScreenViewState
                     height: 50,
                     child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => PartyListView()));
+                        Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => PartyListView())).then((value){
+                                setState(() {
+                                  billNameController.text=value["partyName"];
+                                  partyId=value["partyId"];
+                                });
+                                print(value["partyName"]);
+                        });
+
                         },
                         child: Icon(Icons.search),
                         style: ButtonStyle(
@@ -218,14 +238,14 @@ class _PaymentSucessfullScreenViewState
                 }
                 else {
                   uploadSaleData().then((sucess)async{
-                    Database db = await SQLiteDbProvider.db.database;
-                    db.rawUpdate(
-                        "update itm_mastr set itm_rate=0,is_selected='N' where is_selected='Y'");
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => HomeScreenView()));
+                print(sucess.body);
+                Database db = await SQLiteDbProvider.db.database;
+                db.rawUpdate(
+                    "update itm_mastr set itm_rate=0,is_selected='N' where is_selected='Y'");
+                    Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreenView()));
                   });
                 }
-                // Navigator.push(context,MaterialPageRoute(builder: (context)=>PaymentScreenView()));
+
               },
               child: Container(
                 margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),

@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-
 import 'package:billing_app/screens/home/data/models/home_model.dart';
 import 'package:billing_app/screens/home/data/repository/home_repository.dart';
 import 'package:billing_app/screens/home/home_view.dart';
@@ -23,8 +21,9 @@ class HomeScreenController extends ChangeNotifier {
   String? totalRate;
   String ? totSum;
   List<String> itemNameList=[];
-  List<String> groupNameList=["All Items"];
+  List<String> groupNameList=[];
   List itemsList=[];
+  String selectedItem="";
   TextEditingController  searchController=TextEditingController();
   void onSearchPressed() {
     isSearchBarVisible = true;
@@ -64,13 +63,23 @@ class HomeScreenController extends ChangeNotifier {
 
   }
   Future<void> getStoredGroups()async{
+    groupNameList.clear();
     Database db = await SQLiteDbProvider.db.database;
     final List<Map<String, dynamic>> result = await db.rawQuery("select group_name from group_mastr");
-    groupNameList.clear();
-    groupNameList=["All Items"];
+
     for(int i=0;i<result.length;i++){
       groupNameList.add(result[i]["group_name"]);
     }
+    selectedItem=groupNameList[0];
+    List data=await db.rawQuery("select group_id from group_mastr where group_name='${selectedItem}'");
+    String selectedGroupId="";
+
+
+      for(int i=0;i<data.length;i++){
+        selectedGroupId=data[i]["group_id"].toString();
+      }
+      itemsList=await db.rawQuery( "SELECT * FROM itm_mastr pm where pm.group_id=${selectedGroupId}");
+    notifyListeners();
     print(groupNameList);
     notifyListeners();
   }
@@ -188,6 +197,7 @@ class HomeScreenController extends ChangeNotifier {
   Future <void> getStoredAllItems(context)async{
 
     Database db = await SQLiteDbProvider.db.database;
+    selectedItmList=await db.rawQuery("select itm_id,itm_name from itm_mastr where is_selected='Y'");
     // final List<Map<String, dynamic>> result  = await db.rawQuery("select itm_name from itm_mastr");
     itemsList=await db.rawQuery("select itm_id,itm_name from itm_mastr");
     print(itemsList.length);
@@ -217,6 +227,16 @@ class HomeScreenController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onClearBtnPressed(context)async{
+    print("hello");
+    Database db = await SQLiteDbProvider.db.database;
+    db.rawUpdate(
+        "update itm_mastr set itm_rate=0,is_selected='N' where is_selected='Y'");
+    selectedItmList=await db.rawQuery("select itm_id,itm_name,itm_rate,qty from itm_mastr where is_selected='Y'");
+    Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreenView()));
+  notifyListeners();
+  }
+
 
   Future<void> getStoredAllParty()async{
 
@@ -230,11 +250,9 @@ class HomeScreenController extends ChangeNotifier {
     Database db = await SQLiteDbProvider.db.database;
     db.rawUpdate("update itm_mastr set itm_rate=0,is_selected='N',qty=0 where itm_id=${itmId}");
     selectedItmList=await db.rawQuery("select itm_id,itm_name,itm_rate,qty from itm_mastr where is_selected='Y'");
-    List sum=await db.rawQuery("select sum(itm_rate)sum from itm_mastr where is_selected='Y'");
+    List sum=await db.rawQuery("select sum(tot_rate)sum from itm_mastr where is_selected='Y'");
     print(sum);
-    for(int i=0;i<sum.length;i++){
-      totSum=sum[i]["sum"].toStringAsFixed(2);
-    }
+      totSum=sum[0]["sum"].toStringAsFixed(2);
     notifyListeners();
   }
 

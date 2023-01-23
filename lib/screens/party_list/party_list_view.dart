@@ -5,7 +5,9 @@ import 'package:billing_app/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 class PartyListView extends StatefulWidget {
-  const PartyListView({Key? key}) : super(key: key);
+final  int ? paymentId;
+final String ? total;
+  const PartyListView({Key? key,this.total,this.paymentId}) : super(key: key);
 
   @override
   _PartyListViewState createState() => _PartyListViewState();
@@ -79,8 +81,11 @@ class _PartyListViewState extends State<PartyListView> {
                       itemBuilder: (BuildContext, index) {
                         return GestureDetector(
                           onTap: () async{
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>PaymentSucessfullScreenView(partyName:  partyDtls[index][
-                            "party_name"],)));
+                            Navigator.of(context).pop({"partyName":partyDtls[index]["party_name"],"partyId":partyDtls[index]["party_id"]});
+                            // Navigator.pop(context,partyDtls[index][
+                            // "party_name"]);
+                            // Navigator.push(context,MaterialPageRoute(builder: (context)=>PaymentSucessfullScreenView(partyName:  partyDtls[index][
+                            // "party_name"],partyId: partyDtls[index]["party_id"],paytype: widget.paymentId,total: widget.total,)));
                           },
                           child: Container(
                             padding: EdgeInsets.only(left: 10,right: 10),

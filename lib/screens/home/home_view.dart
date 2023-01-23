@@ -44,7 +44,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       position: RelativeRect.fromLTRB(left, top, 0, 0),
       items: [
         PopupMenuItem<String>(
-            child: const Text('Clear'), value: 'Clear'),
+            child:  InkWell(child:Text('Clear'),onTap: (){
+              context.read<HomeScreenController>().onClearBtnPressed(context);
+            },), value: 'Clear'),
       ],
       elevation: 8.0,
     );
@@ -492,7 +494,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                            onChanged: (value){
 read.onGroupSelected(value);
                            },
-                           selectedItem: "All Items",
+                           selectedItem: watch.selectedItem,
                          ),
                        ),
 
