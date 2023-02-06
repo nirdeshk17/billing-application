@@ -79,8 +79,14 @@ class HomeScreenController extends ChangeNotifier {
         selectedGroupId=data[i]["group_id"].toString();
       }
       itemsList=await db.rawQuery( "SELECT * FROM itm_mastr pm where pm.group_id=${selectedGroupId}");
-    notifyListeners();
-    print(groupNameList);
+    List sum=await db.rawQuery("select sum(tot_rate)sum from itm_mastr where is_selected='Y'");
+    print(sum);
+    if(sum[0]["sum"]!=null){
+      totSum=sum[0]["sum"].toStringAsFixed(2);
+    }
+   else{
+     totSum="0.0";
+    }
     notifyListeners();
   }
   Future<void> getAllItems(context) async {

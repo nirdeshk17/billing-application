@@ -241,7 +241,7 @@ class _PaymentSucessfullScreenViewState
                 print(sucess.body);
                 Database db = await SQLiteDbProvider.db.database;
                 db.rawUpdate(
-                    "update itm_mastr set itm_rate=0,is_selected='N' where is_selected='Y'");
+                    "update itm_mastr set itm_rate=0,tot_rate=0,is_selected='N' where is_selected='Y'");
                     Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreenView()));
                   });
                 }

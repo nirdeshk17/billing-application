@@ -5,6 +5,7 @@ import 'package:billing_app/screens/drawer/menuscreen.dart';
 import 'package:billing_app/screens/home/controller/home_screen_controller.dart';
 import 'package:billing_app/screens/item_cart/item_cart_view.dart';
 import 'package:billing_app/screens/login/login_view.dart';
+import 'package:billing_app/screens/sales_report/sales_report.dart';
 import 'package:billing_app/utils/database.dart';
 import 'package:billing_app/widgets/searchbar.dart';
 import 'package:billing_app/widgets/text_field.dart';
@@ -174,6 +175,48 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               padding: EdgeInsets.only(left: 25,right: 25,top: 20),
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  InkWell(
+                    onTap: (){
+
+Navigator.push(context,MaterialPageRoute(builder: (context)=>SalesReport()));
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: outerBoxDecoration,
+                          child:Container(
+                            height: 50,
+                            width: 50,
+                            //   margin: EdgeInsets.all(2.5),
+                            decoration: innerBoxDecoration,
+                            child: Center(
+                              child:Container(
+                                margin: EdgeInsets.only(right: 5,bottom: 2),
+                                width: 20,
+                                height: 20,
+                                child:Icon(Icons.article_outlined,color: AppColor.primaryColor,),
+                              ),
+                            ),
+                          ),
+
+
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text("Sale Report",style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontFamily: 'whitneysemibold',
+                            fontWeight: FontWeight.w300),)
+                      ],
+                    ),
+                  ),
                   SizedBox(
                     height: 20,
                   ),
@@ -402,7 +445,13 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             ),
             InkWell(
               onTap: (){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckoutViewScreen(checkoutList:watch.selectedItmList,itemQty:watch.selectedItmList?.length.toString(),total: watch.totSum,)));
+                int num=watch.selectedItmList?.length??0;
+                if(num>0){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckoutViewScreen(checkoutList:watch.selectedItmList,itemQty:watch.selectedItmList?.length.toString(),total: watch.totSum,)));
+                }
+               else{
+                 return;
+                }
               },
               child: Row(
                 children: [
