@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:billing_app/network/base_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,9 +23,14 @@ class _RecieptState extends State<Reciept> {
   getSalesDetails()async{
     print(widget.tranNo);
     SharedPreferences pref = await SharedPreferences.getInstance();
-    var res = await http.get(Uri.parse("${BaseUrl.getSalesDetails}&token=${pref.getString("LICENCE")}&tran_no=${widget.tranNo}"));
-    print(res.body);
-    var a = jsonDecode(res.body);
+    var uri=Uri.parse("${BaseUrl.getSalesDetails}&token=${pref.getString("LICENCE")}&tran_no=${widget.tranNo}");
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request = await client.postUrl(uri);
+    HttpClientResponse response = await request.close();
+    var reply = await response.transform(utf8.decoder).join();
+    var a = jsonDecode(reply);
     print(a);
     if(a["status"]=="1"){
       setState(() {

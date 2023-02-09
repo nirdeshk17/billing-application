@@ -1,17 +1,42 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:billing_app/network/base_url.dart';
 import 'package:http/http.dart' as http;
 class HomeRepository{
-  Future <http.Response> getItemData(token)async {
-    print("${BaseUrl.getItemsUrl}&token=${token}");
-    return http.get(Uri.parse("${BaseUrl.getItemsUrl}&token=${token}"));
+
+     getItemData(token)async {
+    var uri=Uri.parse("${BaseUrl.getItemsUrl}&token=${token}");
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request = await client.postUrl(uri);
+    HttpClientResponse response = await request.close();
+    var reply = await response.transform(utf8.decoder).join();
+    return reply;
   }
-    Future<http.Response> getPartyData(token)async{
-     print("${BaseUrl.getPartyUrl}&token=${token}");
-    return http.get(Uri.parse("${BaseUrl.getPartyUrl}&token=${token}"));
+
+
+     getPartyData(token)async{
+      var uri=Uri.parse("${BaseUrl.getPartyUrl}&token=${token}");
+      print(uri);
+      HttpClient client = new HttpClient();
+      client.badCertificateCallback =
+      ((X509Certificate cert, String host, int port) => true);
+      HttpClientRequest request = await client.postUrl(uri);
+      HttpClientResponse response = await request.close();
+      var reply = await response.transform(utf8.decoder).join();
+      return reply;
     }
-  Future<http.Response> getGroupData(token)async{
-    print("${BaseUrl.getGroupUrl}&token=${token}");
-    return http.get(Uri.parse("${BaseUrl.getGroupUrl}&token=${token}"));
+
+   getGroupData(token)async{
+    var uri=Uri.parse("${BaseUrl.getGroupUrl}&token=${token}");
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request = await client.postUrl(uri);
+    HttpClientResponse response = await request.close();
+    var reply = await response.transform(utf8.decoder).join();
+    return reply;
   }
+
 }

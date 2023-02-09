@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:billing_app/constants/colors.dart';
 import 'package:billing_app/network/base_url.dart';
@@ -17,11 +18,16 @@ class _SalesReportState extends State<SalesReport> {
   List salesData=[];
   getSalesReportData()async{
     SharedPreferences pref = await SharedPreferences.getInstance();
-    
-    var res = await http.get(Uri.parse("${BaseUrl.getSales}&token=${pref.getString("LICENCE")}&user_id=${pref.getString("ID")}"));
-   print("${BaseUrl.getSales}&token=${pref.getString("LICENCE")}&user_id=${pref.getString("ID")}");
-    print(res.body);
-      var a = jsonDecode(res.body);
+    var uri=Uri.parse("${BaseUrl.getSales}&token=${pref.getString("LICENCE")}&user_id=${pref.getString("ID")}");
+    print(uri);
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request = await client.postUrl(uri);
+    HttpClientResponse response = await request.close();
+    var reply = await response.transform(utf8.decoder).join();
+          print("reply${reply}");
+      var a = jsonDecode(reply);
       print(a);
       if(a["status"]=="1"){
         setState(() {

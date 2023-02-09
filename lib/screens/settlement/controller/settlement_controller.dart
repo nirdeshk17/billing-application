@@ -33,8 +33,8 @@ class SettlementController extends ChangeNotifier{
     final SharedPreferences pref = await SharedPreferences.getInstance();
     isLoading=true;
     _paymentRepository.getPaymentData(pref.getString("LICENCE")).then((response){
-      if (response.statusCode == 200){
-        final result = jsonDecode(response.body);
+      if (response != ""){
+        final result = jsonDecode(response);
         final data = PaymentResModel.fromJson(result);
         status=data.status;
         message=data.message;

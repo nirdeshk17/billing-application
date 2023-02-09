@@ -48,9 +48,9 @@ class HomeScreenController extends ChangeNotifier {
     Database db = await SQLiteDbProvider.db.database;
     final SharedPreferences pref = await SharedPreferences.getInstance();
     _homeRepository.getGroupData(pref.getString("LICENCE")).then((response)async{
-      if(response.statusCode==200){
-        List result=jsonDecode(response.body);
-        print("kkkkk");
+      print(response);
+      if(response!=""){
+        List result=jsonDecode(response);
        print(result);
        db.rawDelete("delete from group_mastr");
         for(int i=0;i<result.length;i++){
@@ -100,8 +100,8 @@ class HomeScreenController extends ChangeNotifier {
           .getItemData(pref.getString("LICENCE"))
           .then((response) async {
         print(response);
-        if (response.statusCode == 200) {
-          final result = jsonDecode(response.body);
+        if (response!="") {
+          final result = jsonDecode(response);
           final data = ItemsResModel.fromJson(result);
           if (data.status == "1") {
             items = data.data;
@@ -143,8 +143,8 @@ class HomeScreenController extends ChangeNotifier {
       _homeRepository
           .getPartyData(pref.getString("LICENCE"))
           .then((response) async {
-        if (response.statusCode == 200) {
-          final result = jsonDecode(response.body);
+        if (response!="") {
+          final result = jsonDecode(response);
           final data = PartyResModel.fromJson(result);
           if (data.status == "1") {
             party = data.data;

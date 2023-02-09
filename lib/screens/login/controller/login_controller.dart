@@ -18,9 +18,8 @@ LoginData? loginData;
 Future<void> getLoginInfo(BuildContext context)async{
   if(userNameController.text!=""&&passwordController.text!=""){
     _loginRepository.getLoginData(userNameController.text,passwordController.text).then((response)async{
-      print(response.statusCode);
-      if(response.statusCode==200){
-        final result=jsonDecode(response.body);
+      if(response!=""){
+        final result=jsonDecode(response);
         print(result);
         final data=LoginResModel.fromJson(result);
         print("result ${result}");

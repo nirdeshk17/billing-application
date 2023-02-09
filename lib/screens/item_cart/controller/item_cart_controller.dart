@@ -59,8 +59,8 @@ class ItemCartController extends ChangeNotifier{
 
     _itemRateRepository.getItemRate(pref.getString("LICENCE"),id)
         .then((response) async {
-      if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
+      if (response!="") {
+        final result = jsonDecode(response);
         final data = itemRateResModel.fromJson(result);
         status=data.status;
         if(status=="1"){

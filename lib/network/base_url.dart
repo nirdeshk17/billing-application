@@ -1,5 +1,5 @@
 class BaseUrl{
-static const  String baseUrl="http://117.200.73.2/retail_api/api.php";
+static const  String baseUrl="https://custom.fairbookspro.com/retail_api/api.php";
 
 static const String loginUrl="${baseUrl}?request=LOGIN";
 static const String getItemsUrl="${baseUrl}?request=GETITEMS";

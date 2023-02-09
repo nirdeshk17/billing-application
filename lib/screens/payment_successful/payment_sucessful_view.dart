@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:billing_app/network/base_url.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +38,7 @@ class _PaymentSucessfullScreenViewState
     });
   }
 
-  Future<http.Response> uploadSaleData() async {
+uploadSaleData() async {
     Database db = await SQLiteDbProvider.db.database;
     List salesData=await db.rawQuery("select itm_id,qty,(itm_rate)rate from itm_mastr where is_selected='Y'");
     final SharedPreferences pref = await SharedPreferences.getInstance();
@@ -61,6 +62,21 @@ class _PaymentSucessfullScreenViewState
         }
       ],
     };
+    var token= pref.getString("LICENCE");
+    print(jsonEncode(body));
+
+    var uri =Uri.parse("${BaseUrl.baseUrl}?request=SAVESALE&token=$token");
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => true);
+
+    HttpClientRequest request = await client.postUrl(uri);
+    request.write(body);
+    HttpClientResponse response = await request.close();
+    var reply = await response.transform(utf8.decoder).join();
+    // var res = jsonDecode(reply);
+    return reply;
     print(body);
     return http.post(
       Uri.parse("${BaseUrl.baseUrl}?request=SAVESALE&token=${pref.getString("LICENCE")}"),
@@ -237,8 +253,10 @@ class _PaymentSucessfullScreenViewState
                   return;
                 }
                 else {
-                  uploadSaleData().then((sucess)async{
-                print(sucess.body);
+                  uploadSaleData().then((response)async{
+                    print("99999999");
+                 print(response);
+                    print("99999999");
                 Database db = await SQLiteDbProvider.db.database;
                 db.rawUpdate(
                     "update itm_mastr set itm_rate=0,tot_rate=0,is_selected='N' where is_selected='Y'");
